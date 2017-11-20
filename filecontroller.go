@@ -62,27 +62,10 @@ func (fileManager *FileController) uploadFile(w http.ResponseWriter, r *http.Req
 		fmt.Fprintln(w, err)
 	}
 
-	fileResult := fileManager.dbManager.addNewFile(userID, parameter1, fileName)
+	_ = fileManager.dbManager.addNewFile(userID, parameter1, fileName)
 
-	if fileResult == nil {
-		fmt.Fprintf(w, userID+" File uploaded successfully : ")
-		fmt.Fprintf(w, header.Filename)
-	} else {
-		if _, err := os.Stat("./uploads/" + fileName); err == nil {
-			err := os.Remove("deleteme.file")
-
-			if err != nil {
-				fmt.Println(err)
-				fmt.Fprintf(w, userID+" File upload failed : ")
-				fmt.Fprintf(w, header.Filename)
-
-				return
-			}
-
-			fmt.Fprintf(w, userID+" File upload failed : ")
-			fmt.Fprintf(w, header.Filename)
-		}
-	}
+	fmt.Fprintf(w, userID+" File uploaded successfully : ")
+	fmt.Fprintf(w, header.Filename)
 }
 
 func (fileManager *FileController) uploadMultipleFiles(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
@@ -134,26 +117,6 @@ func (fileManager *FileController) uploadMultipleFiles(w http.ResponseWriter, r 
 			}
 
 			_ = fileManager.dbManager.addNewFile(userID, parameter1, fileName)
-
-			// if fileResult == nil {
-			// 	fmt.Fprintf(w, userID+" File uploaded successfully : ")
-			// 	fmt.Fprintf(w, header.Filename)
-			// } else {
-			// 	if _, err := os.Stat("./uploads/" + fileName); err == nil {
-			// 		err := os.Remove("deleteme.file")
-
-			// 		if err != nil {
-			// 			fmt.Println(err)
-			// 			fmt.Fprintf(w, userID+" File upload failed : ")
-			// 			fmt.Fprintf(w, header.Filename)
-
-			// 			return
-			// 		}
-
-			// 		fmt.Fprintf(w, userID+" File upload failed : ")
-			// 		fmt.Fprintf(w, header.Filename)
-			// 	}
-			// }
 		}
 		fmt.Fprintf(w, userID+" Files uploaded successfully")
 	} else {
